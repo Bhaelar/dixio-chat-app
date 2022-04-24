@@ -49,7 +49,7 @@ export class ChatService {
     }
 
 
-    public joinRoom(user: UserModel): Array<UserModel> {
+    public joinRoom(user: UserModel): UserModel {
         const userExists: boolean = this.users.some(
             (loggedUser) => loggedUser.name === user.name,
         );
@@ -65,9 +65,9 @@ export class ChatService {
             id
         };
 
-        this.users.push(newUser);
+        this.users.push(newUser)
 
-        return this.users;
+        return newUser;
     }
 
     public sendMessage(message: MessageModel): MessageModel {

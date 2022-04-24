@@ -8,13 +8,17 @@ import { ChatService } from './chat.service';
 })
 export class AppComponent {
   constructor(private chatService: ChatService) {
-    this.chatService.joinedUser().subscribe((user: any) => {
-      if (this.username === user[user.length - 1].name) {
-        this.currentUser = user[user.length - 1];
-        this.loggedIn = true;
-      }
+    this.chatService.getUsers();
+    this.chatService.usersFetched().subscribe((users: any) => {
+      this.users = users;
+    });
 
-      this.users = user;
+    this.chatService.joinedUser().subscribe((user: any) => {
+      if (user.name === this.username) {
+        this.loggedIn = true;
+        this.currentUser = user;
+      }
+      this.users.push(user);
     });
 
     this.chatService.messagesFetched().subscribe((messages: any) => {
@@ -46,11 +50,19 @@ export class AppComponent {
     senderId: number;
     messageContent: string;
   }> = [];
+  loginError: boolean = false;
 
   joinChat() {
     const { username } = this;
     try {
-      this.chatService.joinRoom({ name: username });
+      const findUser = this.users.filter(
+        (user) => user.name.toLowerCase() === username.toLowerCase()
+      );
+      if (findUser.length > 0) {
+        this.loginError = true;
+        return;
+      }
+      this.chatService.joinRoom({ name: username.trim() });
       this.getMessages();
     } catch (err) {
       console.log(err);
@@ -83,6 +95,7 @@ export class AppComponent {
   }
 
   goToBottom() {
-    this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
+    this.scroll.nativeElement.scrollTop =
+      this.scroll.nativeElement.scrollHeight;
   }
 }

@@ -224,3 +224,7 @@ img {
 .message {
 	list-style-type: none;
 }
+
+.red {
+	color: red;
+}

@@ -48,6 +48,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     this.server.emit('userJoined', newUser);
   }
 
+  @SubscribeMessage('getUsers')
+  getUsers(client: Socket): void {
+    const users = this.chatService.findAllUsers();
+    this.logger.log(`Users fetched: ${JSON.stringify(users)}`);
+    this.server.emit('users', users);
+  }
+
   @SubscribeMessage('getMessages')
   getMessages(client: Socket): void {
     const messages = this.chatService.findAllMessages();

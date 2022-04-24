@@ -7,6 +7,9 @@ export class ChatService {
   constructor(private socket: Socket) {
   }
   getUsers() {
+    return this.socket.emit('getUsers');
+  }
+  usersFetched() {
     return this.socket.fromEvent('users');
   }
   joinRoom(user: { name: string }) {

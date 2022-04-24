@@ -19,7 +19,7 @@ export class ChatController {
     }
 
     @Post('/users')
-    public joinRoom(@Body() user: UserModel): Array<UserModel> {
+    public joinRoom(@Body() user: UserModel): UserModel {
        return this.chatService.joinRoom(user);
     }
 
